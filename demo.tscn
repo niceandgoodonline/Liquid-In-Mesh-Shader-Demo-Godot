@@ -1,0 +1,157 @@
+[gd_scene load_steps=23 format=3 uid="uid://bi2p2lo61e3kx"]
+
+[ext_resource type="Script" path="res://Demo.gd" id="1_axn4c"]
+[ext_resource type="Material" uid="uid://cahvp7irak1ll" path="res://Demo/Example/demo-capsule-shader-material.tres" id="2_8t5wo"]
+[ext_resource type="Shader" path="res://Demo/transparent_base_shader.gdshader" id="3_roxfe"]
+[ext_resource type="Material" uid="uid://ban1tkxa0fwph" path="res://Demo/Example/intense-movement-example-shader-material.tres" id="5_o314f"]
+[ext_resource type="Material" uid="uid://bjcdafc1a12jm" path="res://Demo/Example/smooth-movement-shader-material.tres" id="6_tfst8"]
+[ext_resource type="Material" uid="uid://bso8245om53se" path="res://Demo/Example/rotation-shader-material.tres" id="7_u0jxa"]
+[ext_resource type="Script" path="res://LiquidShader/MinimalLiquidSimulationAsTool.gd" id="8_0v2kp"]
+[ext_resource type="Script" path="res://LiquidShader/MinimalLiquidSimulation.gd" id="8_n5etw"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a1mbq"]
+sky_top_color = Color(0.556863, 0.772549, 0.984314, 1)
+sky_horizon_color = Color(0.831373, 0.705882, 0.890196, 1)
+ground_bottom_color = Color(0.133333, 0.435294, 0.254902, 1)
+ground_horizon_color = Color(0.196078, 0.843137, 0.443137, 1)
+
+[sub_resource type="Sky" id="Sky_lwf2i"]
+sky_material = SubResource("ProceduralSkyMaterial_a1mbq")
+
+[sub_resource type="Environment" id="Environment_khluk"]
+background_mode = 1
+background_color = Color(0.788235, 0.839216, 0.882353, 1)
+sky = SubResource("Sky_lwf2i")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_48pxx"]
+size = Vector2(32, 32)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_84hsp"]
+albedo_color = Color(0.0588235, 0, 0.305882, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7io4g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t4q28"]
+render_priority = 0
+next_pass = ExtResource("7_u0jxa")
+shader = ExtResource("3_roxfe")
+shader_parameter/AlphaAmount = 0.015
+shader_parameter/Metallic = 0.391
+shader_parameter/Roughness = 0.175
+shader_parameter/Rim = 0.0
+shader_parameter/RimTint = 0.0
+shader_parameter/Specular = 0.845
+
+[sub_resource type="SphereMesh" id="SphereMesh_gx2lq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hhwux"]
+render_priority = 0
+next_pass = ExtResource("6_tfst8")
+shader = ExtResource("3_roxfe")
+shader_parameter/AlphaAmount = 0.058
+shader_parameter/Metallic = 0.829
+shader_parameter/Roughness = 0.154
+shader_parameter/Rim = 0.0
+shader_parameter/RimTint = 0.0
+shader_parameter/Specular = 1.0
+
+[sub_resource type="TorusMesh" id="TorusMesh_tdju8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_odkmu"]
+render_priority = 0
+next_pass = ExtResource("5_o314f")
+shader = ExtResource("3_roxfe")
+shader_parameter/AlphaAmount = 0.061
+shader_parameter/Metallic = 0.069
+shader_parameter/Roughness = 0.091
+shader_parameter/Rim = 0.0
+shader_parameter/RimTint = 0.0
+shader_parameter/Specular = 1.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_evkf8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1dpt"]
+render_priority = 0
+next_pass = ExtResource("2_8t5wo")
+shader = ExtResource("3_roxfe")
+shader_parameter/AlphaAmount = 0.023
+shader_parameter/Metallic = 0.579
+shader_parameter/Roughness = 0.052
+shader_parameter/Rim = 0.0
+shader_parameter/RimTint = 0.0
+shader_parameter/Specular = 0.907
+
+[sub_resource type="SphereMesh" id="SphereMesh_hiveb"]
+
+[node name="Demo" type="Node3D" node_paths=PackedStringArray("RotationExample", "SmoothExample", "IntenseExample")]
+script = ExtResource("1_axn4c")
+RotationExample = NodePath("LiquidSimulation/rotation")
+rotationExampleRotationSpeed = 14.3
+rotationExampleTranslatingSpeed = 1.6
+rotationExampleTranslationRange = 0.2
+SmoothExample = NodePath("LiquidSimulation/smooth")
+smoothExampleIsRotating = false
+smoothExampleTranslatingSpeed = 2.3
+smoothExampleTranslationRange = 1.1
+IntenseExample = NodePath("LiquidSimulation/intense")
+intenseExampleIsRotating = false
+intenseExampleTranslationRange = 3.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_khluk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.751264, 0.247241, -0.611943, 0, 0.927184, 0.374607, 0.660002, -0.281428, 0.69656, 0, 2.18462, 0)
+shadow_enabled = true
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="ground" type="MeshInstance3D" parent="Geometry"]
+mesh = SubResource("PlaneMesh_48pxx")
+surface_material_override/0 = SubResource("StandardMaterial3D_84hsp")
+
+[node name="LiquidSimulation" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+
+[node name="rotation" type="MeshInstance3D" parent="LiquidSimulation"]
+transform = Transform3D(0.665385, -0.294649, -0.68589, -0.442076, -0.895898, -0.0439937, -0.601525, 0.332488, -0.726374, -3.164, 0, 2.938)
+mesh = SubResource("BoxMesh_7io4g")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_t4q28")
+script = ExtResource("8_n5etw")
+liquidShaderMaterial = ExtResource("7_u0jxa")
+
+[node name="smooth" type="MeshInstance3D" parent="LiquidSimulation"]
+transform = Transform3D(-0.908985, -0.172786, -0.379331, -0.254119, 0.951075, 0.175725, 0.330409, 0.256127, -0.908421, 2.28522, 0, 2.59361)
+mesh = SubResource("SphereMesh_gx2lq")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_hhwux")
+script = ExtResource("8_n5etw")
+liquidShaderMaterial = ExtResource("6_tfst8")
+
+[node name="intense" type="MeshInstance3D" parent="LiquidSimulation"]
+transform = Transform3D(-0.908985, -0.172785, -0.37933, -0.393717, 0.654721, 0.645234, 0.136868, 0.735857, -0.66316, 0.13405, 0, -0.104486)
+mesh = SubResource("TorusMesh_tdju8")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_odkmu")
+script = ExtResource("8_n5etw")
+liquidShaderMaterial = ExtResource("5_o314f")
+liquid_mobility = 0.8
+springConstant = 512
+reaction = 8
+dampening = 2
+
+[node name="PlayWithMe" type="MeshInstance3D" parent="LiquidSimulation"]
+transform = Transform3D(0.909047, -0.416693, 0, 0.416693, 0.909047, 0, 0, 0, 1, -2.77163, -2.35034, 5.50067)
+mesh = SubResource("CapsuleMesh_evkf8")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_s1dpt")
+script = ExtResource("8_0v2kp")
+liquidShaderMaterial = ExtResource("2_8t5wo")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.20569, 7.42172)
+
+[node name="ShadowCaster" type="MeshInstance3D" parent="."]
+transform = Transform3D(64, 0, 0, 0, 64, 0, 0, 0, 64, -45.9388, 44.6969, 19.0347)
+mesh = SubResource("SphereMesh_hiveb")

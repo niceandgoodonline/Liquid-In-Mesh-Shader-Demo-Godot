@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://cahvp7irak1ll"]
+
+[ext_resource type="Shader" path="res://LiquidShader/Shader/liquid.gdshader" id="1_6ujed"]
+[ext_resource type="Texture2D" uid="uid://p48ttmh1g7tq" path="res://Demo/Assets/BubblesNoise.tres" id="2_cne1n"]
+[ext_resource type="Texture2D" uid="uid://co7s5tp5nnmpv" path="res://Demo/Assets/WaveNoise.tres" id="3_kpdcq"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_6ujed")
+shader_parameter/coeff = Vector2(0, -1.69054e-06)
+shader_parameter/vel = 0.0
+shader_parameter/liquid_color = Color(0.8, 0.2, 0.8, 1)
+shader_parameter/foam_color = Color(0.756863, 0.341176, 0.988235, 1)
+shader_parameter/foam_line = 0.2
+shader_parameter/fill_amount = 0.5
+shader_parameter/size = Vector2(1, 1)
+shader_parameter/glass_thickness = 0.1
+shader_parameter/scale = 1.0
+shader_parameter/wave_intensity = 0.2
+shader_parameter/waves_noise = ExtResource("3_kpdcq")
+shader_parameter/HasBubbles = true
+shader_parameter/AlwaysBubbles = false
+shader_parameter/BubbleStrength = 0.5
+shader_parameter/BubbleMask = 0.5
+shader_parameter/BubbleSpeed = Vector2(3, 4)
+shader_parameter/bubbles_tex = ExtResource("2_cne1n")
